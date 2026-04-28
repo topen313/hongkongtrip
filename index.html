@@ -1,4 +1,3 @@
-[slides]
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -6,459 +5,277 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HK PIXEL QUEST 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* 基礎設置與像素風格變量 */
         :root {
             --pixel-black: #212529;
             --base-bg: #fdf6e3;
-            --day1-accent: #ffb7b2; /* 淺粉紅 */
-            --day2-accent: #ffdac1; /* 淺橘 */
-            --day3-accent: #e2f0cb; /* 淺綠 */
-            --day4-accent: #b5ead7; /* 淺青 */
-            --border-pixel: 4px solid #444;
+            --border: 3px solid #444;
+            --day1: #ffcfd2; --day2: #fde4cf; --day3: #fbf8cc; --day4: #d8f3dc;
         }
+        * { box-sizing: border-box; }
+        body { background-color: var(--base-bg); color: var(--pixel-black); font-family: 'Noto Sans TC', sans-serif; margin: 0; padding: 15px; line-height: 1.4; }
+        .pixel-font { font-family: 'Press Start 2P', cursive; font-size: 10px; }
+        
+        /* 酒店置頂區 */
+        .hotel-header { background: #fff; border: var(--border); padding: 15px; margin-bottom: 25px; box-shadow: 4px 4px 0 #999; text-align: center; }
+        .hotel-title { font-weight: bold; font-size: 1.2rem; display: block; margin-bottom: 5px; }
+        
+        /* 區塊樣式 */
+        .day-section { background: #fff; border: var(--border); padding: 15px; margin-bottom: 25px; position: relative; box-shadow: 5px 5px 0 rgba(0,0,0,0.05); }
+        .day-tag { position: absolute; top: -12px; left: 10px; background: #444; color: #fff; padding: 3px 8px; font-size: 8px; }
+        .time-header { font-weight: bold; border-bottom: 2px dashed #eee; margin: 15px 0 10px; color: #d63384; font-size: 16px; }
+        
+        /* 獨立勾選項目 */
+        .task-item { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; padding-bottom: 5px; border-bottom: 1px solid #f2f2f2; }
+        .task-item input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+        .task-label { flex-grow: 1; display: flex; flex-direction: column; }
+        .name { font-weight: 700; font-size: 15px; transition: 0.2s; }
+        .note { font-size: 11px; color: #777; margin-top: 2px; }
+        .best-pick { color: #d32f2f; font-weight: bold; border: 1px solid #d32f2f; padding: 0 3px; font-size: 9px; margin-right: 4px; border-radius: 2px; }
+        
+        /* 地圖連結按鈕樣式 */
+        .map-a { font-size: 10px; color: #0d6efd; text-decoration: none; font-weight: bold; margin-top: 4px; background: #f0f0f0; border: 1px solid #ccc; padding: 2px 6px; display: inline-block; width: fit-content; border-radius: 3px; }
+        
+        /* 劃掉效果 */
+        .strikethrough { text-decoration: line-through; opacity: 0.35; filter: grayscale(1); }
 
-        * {
-            box-sizing: border-box;
-            image-rendering: pixelated;
-        }
-
-        body {
-            background-color: var(--base-bg);
-            color: var(--pixel-black);
-            font-family: 'Noto Sans TC', sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        .pixel-font {
-            font-family: 'Press Start 2P', cursive;
-            text-transform: uppercase;
-        }
-
-        /* 網頁容器 */
-        .page-wrapper {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* 頂部標題與酒店資訊 (Base Camp) */
-        .header-section {
-            background: #fff;
-            border: var(--border-pixel);
-            box-shadow: 8px 8px 0 #bbb;
-            margin-bottom: 40px;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .header-section h1 {
-            font-size: 2.5rem;
-            margin: 10px 0;
-        }
-
-        .hotel-box {
-            background: #fff3bf;
-            border: 2px dashed #444;
-            padding: 20px;
-            margin-top: 20px;
-            display: inline-block;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .hotel-tag {
-            background: #444;
-            color: #fff;
-            padding: 5px 15px;
-            font-size: 0.8rem;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-
-        /* 行程卡片結構 */
-        .day-container {
-            display: grid;
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .day-card {
-            background: #fff;
-            border: var(--border-pixel);
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
-            position: relative;
-            padding: 25px;
-        }
-
-        .day-label {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: #444;
-            color: #fff;
-            padding: 5px 15px;
-            font-size: 0.9rem;
-        }
-
-        /* 任務列表與支線 */
-        .quest-list {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-        }
-
-        .quest-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .quest-item input[type="checkbox"] {
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-            accent-color: #444;
-            margin-top: 5px;
-        }
-
-        .quest-content {
-            flex-grow: 1;
-        }
-
-        .quest-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .note {
-            font-size: 0.9rem;
-            color: #666;
-            background: #f1f3f5;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-
-        /* 支線任務區塊 (推薦店家) */
-        .sub-quest {
-            background: #fdfdfd;
-            border: 2px solid #ddd;
-            margin-top: 10px;
-            padding: 15px;
-            font-size: 0.95rem;
-        }
-
-        .sub-quest-header {
-            font-weight: 700;
-            color: #d63384;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .recommend-tag {
-            background: #ffec99;
-            padding: 0 5px;
-            font-weight: 700;
-            border: 1px solid #fab005;
-            margin-right: 5px;
-            font-size: 0.8rem;
-        }
-
-        /* 地圖連結按鈕 */
-        .map-btn {
-            background: #e9ecef;
-            border: 2px solid #444;
-            color: #212529;
-            text-decoration: none;
-            padding: 2px 10px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: inline-block;
-            margin-top: 5px;
-            box-shadow: 2px 2px 0 #999;
-        }
-
-        .map-btn:hover {
-            background: #dee2e6;
-            box-shadow: 0px 0px 0 #999;
-            transform: translate(2px, 2px);
-        }
-
-        /* 狀態變化 */
-        .completed-text {
-            text-decoration: line-through;
-            opacity: 0.4;
-        }
-
-        /* 底部進度條 */
-        .progress-tracker {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #fff;
-            border: var(--border-pixel);
-            padding: 15px 25px;
-            box-shadow: 6px 6px 0 #bbb;
-            z-index: 1000;
-        }
-
-        /* 圖像定位 */
-        .decor-img {
-            height: 120px;
-            width: auto;
-            position: absolute;
-            bottom: 10px;
-            right: 20px;
-            opacity: 0.2;
-        }
+        .footer-count { position: fixed; bottom: 10px; right: 10px; background: #fff; border: 2px solid #444; padding: 8px; font-size: 10px; box-shadow: 3px 3px 0 #999; z-index: 100; }
+        .alert-box { background: #fff5f5; border: 1px solid #ffb7b2; padding: 8px; font-size: 11px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="page-wrapper">
-    <div class="header-section">
-        <div class="pixel-font" style="font-size: 0.8rem; letter-spacing: 2px; color: #888;">Starting Point</div>
-        <h1 class="pixel-font">HK Quest 2026</h1>
+    <div class="hotel-header">
+        <span class="pixel-font" style="color:#888;">BASE CAMP</span>
+        <span class="hotel-title">🏨 Stellar 星寓 (海匯酒店)</span>
+        <a href="https://www.google.com/maps/search/?api=1&query=Stellar+North+Point" target="_blank" class="map-a">📍開啟酒店導航</a>
+    </div>
+
+    <div class="day-section" style="border-color: var(--day1);">
+        <div class="day-tag pixel-font">LV.1 5/2 FRI</div>
         
-        <div class="hotel-box">
-            <span class="hotel-tag pixel-font">Home Base / 住宿</span><br>
-            <div class="quest-title" style="justify-content: center;">
-                🏨 Stellar (星寓 / 海匯酒店)
-                <a href="https://www.google.com/maps/search/?api=1&query=The+Stellar+68+Chun+Yeung+Street" target="_blank" class="map-btn">📍 GOOGLE MAP</a>
+        <div class="time-header">抵達日：北角/紅磡</div>
+        <div class="task-item">
+            <input type="checkbox">
+            <div class="task-label">
+                <span class="name">紅磡香港體育館</span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Hong+Kong+Coliseum" target="_blank" class="map-a">📍 Map</a>
             </div>
-            <p style="margin: 10px 0 0; color: #555;">📍 地址：香港北角春秧街68號</p>
-            <img src="http://googleusercontent.com/image_collection/image_retrieval/2975353212603524076" alt="Pixel Art Hotel View" class="decor-img" style="opacity: 0.6; position: static; height: 80px; margin-top: 15px;">
+        </div>
+        <div class="task-item">
+            <input type="checkbox">
+            <div class="task-label">
+                <span class="name">合香園 (北角)</span>
+                <span class="note">推薦：沙嗲牛肉麵、奶茶、咖央西多士</span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Hop+Heung+Yuen+North+Point" target="_blank" class="map-a">📍 Map</a>
+            </div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox">
+            <div class="task-label">
+                <span class="name">德發牛丸粉麵 (北角)</span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Tak+Fat+Beef+Ball+North+Point" target="_blank" class="map-a">📍 Map</a>
+            </div>
+        </div>
+
+        <div class="time-header">尖沙咀 (18:30-21:00)</div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name"><span class="best-pick">推</span>Hashtag B (尖沙咀)</span><a href="https://www.google.com/maps/search/?api=1&query=Hashtag+B+Tsim+Sha+Tsui" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">祥興記上海生煎包 (尖沙咀)</span><a href="https://www.google.com/maps/search/?api=1&query=Cheung+Hing+Kee+Tsim+Sha+Tsui" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">華嫂冰室 (尖沙咀)</span><a href="https://www.google.com/maps/search/?api=1&query=Wasou+Cafe+Tsim+Sha+Tsui" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Truffle Bakery</span><a href="https://www.google.com/maps/search/?api=1&query=Truffle+Bakery+Hong+Kong" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Topologie K11 Pop Up</span><a href="https://www.google.com/maps/search/?api=1&query=Topologie+K11+Art+Mall" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">彌敦道散步</span><a href="https://www.google.com/maps/search/?api=1&query=Nathan+Road" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">廟街/興記菜館</span><a href="https://www.google.com/maps/search/?api=1&query=Hing+Kee+Claypot+Rice" target="_blank" class="map-a">📍 Map</a></div>
         </div>
     </div>
 
-    <div class="day-container">
-        <div class="day-card" style="border-color: var(--day1-accent);">
-            <div class="day-label pixel-font">Day 1: 5/2 ARRIVAL</div>
-            <div class="quest-list">
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">北角簡單吃 <span class="note">快速解決</span></span>
-                        <div class="sub-quest">
-                            <span class="sub-quest-header">🏠 附近推薦：</span>
-                            • <span class="recommend-tag">推薦</span> <strong>合香園</strong> (沙嗲牛麵、奶茶、咖央西多士) <a href="https://www.google.com/maps/search/?api=1&query=合香園+北角" target="_blank" class="map-btn">📍MAP</a><br>
-                            • <strong>德發牛丸粉麵</strong> (牛肉米粉) <a href="https://www.google.com/maps/search/?api=1&query=德發牛丸+北角" target="_blank" class="map-btn">📍MAP</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">紅磡香港體育館 (演唱會)</span>
-                        <a href="https://www.google.com/maps/search/?api=1&query=Hong+Kong+Coliseum" target="_blank" class="map-btn">📍MAP</a>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">尖沙咀夜巡 <span class="note">18:30-21:00</span></span>
-                        <div class="sub-quest">
-                            <span class="sub-quest-header">🥐 附近美食與採買：</span>
-                            • <span class="recommend-tag">推薦</span> <strong>Hashtag B</strong> (拿破崙蛋塔) <a href="https://www.google.com/maps/search/?api=1&query=Hashtag+B+尖沙咀" target="_blank" class="map-btn">📍MAP</a><br>
-                            • <strong>祥興記上海生煎包</strong> (招牌生煎) <a href="https://www.google.com/maps/search/?api=1&query=祥興記+尖沙咀" target="_blank" class="map-btn">📍MAP</a><br>
-                            • <strong>華嫂冰室</strong> / <strong>義順牛奶公司</strong> (⚠️尖沙咀店已倒，改日去銅鑼灣)<br>
-                            • <strong>Truffle Bakery</strong> (麵包) / <strong>華記潮洲滷水車仔麵</strong>
-                        </div>
-                        <div class="sub-quest">
-                            <span class="sub-quest-header">🛍️ 逛街與景點：</span>
-                            • <strong>Topologie K11 Pop Up</strong> / <strong>K11 MUSEA</strong> / <strong>彌敦道</strong> / <strong>維港夜景</strong><br>
-                            • <strong>廟街</strong> / <strong>興記菜館</strong> (臘味煲仔飯)
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <img src="http://googleusercontent.com/image_collection/image_retrieval/5165528417461618056" class="decor-img">
+    <div class="day-section" style="border-color: var(--day2);">
+        <div class="day-tag pixel-font">LV.2 5/3 SAT</div>
+        <div class="time-header">上環/中環 散步</div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name"><span class="best-pick">必</span>生記粥品專家</span><span class="note">廣東粥、炸兩</span><a href="https://www.google.com/maps/search/?api=1&query=Sang+Kee+Congee+Sheung+Wan" target="_blank" class="map-a">📍 Map</a></div>
         </div>
-
-        <div class="day-card" style="border-color: var(--day2-accent);">
-            <div class="day-label pixel-font">Day 2: 5/3 HONG KONG ISLAND</div>
-            <div class="quest-list">
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">上環早餐組</span>
-                        <div class="sub-quest">
-                            • <span class="recommend-tag">推薦</span> <strong>生記粥品專家</strong> (廣東粥、炸兩) <a href="https://www.google.com/maps/search/?api=1&query=生記粥品專家" target="_blank" class="map-btn">📍MAP</a><br>
-                            • <strong>六安居</strong> (傳統飲茶) / <strong>夏銘記</strong> (魚蛋河)
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">上環、中環散步支線 <span class="note">同性質店家</span></span>
-                        <div class="sub-quest">
-                            <span class="sub-quest-header">☕ 咖啡與甜點：</span>
-                            • <span class="recommend-tag">推薦</span> <strong>FINEPRINT</strong> / <strong>Vission Nine</strong> (✨推薦組合)<br>
-                            • <strong>hara kako</strong> / <strong>EN</strong> / <strong>Milligram Coffee</strong> / <strong>The Ice Cream & Cookie Co.</strong><br>
-                            • <strong>Ohlalagout</strong> (蛋塔) / <strong>祥興茶行</strong> / <span class="recommend-tag">推薦</span> <strong>蘭芳園</strong> (奶茶)
-                        </div>
-                        <div class="sub-quest">
-                            <span class="sub-quest-header">🏺 選物與景點：</span>
-                            • <strong>Select 18</strong> (古物) / <strong>Slowood</strong> / <strong>石板街</strong> / <strong>半山扶梯</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">山頂觀景任務</span>
-                        <div class="sub-quest">
-                            • <strong>山頂廣場 (The Peak Galleria)</strong> <a href="https://www.google.com/maps/search/?api=1&query=Peak+Galleria" target="_blank" class="map-btn">📍MAP</a><br>
-                            • ✨ 帶 <strong>竺扶大班燒味</strong> (燒鵝) 上山吃
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <img src="http://googleusercontent.com/image_collection/image_retrieval/116441680548474249" class="decor-img">
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">六安居 (飲茶)</span><a href="https://www.google.com/maps/search/?api=1&query=Luk+On+Kui+Sheung+Wan" target="_blank" class="map-a">📍 Map</a></div>
         </div>
-
-        <div class="day-card" style="border-color: var(--day3-accent);">
-            <div class="day-label pixel-font">Day 3: 5/4 SHOPPING DAY</div>
-            <div class="quest-list">
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">灣仔早餐與漫步</span>
-                        <div class="sub-quest">
-                            • <span class="recommend-tag">推薦</span> <strong>金鳳茶餐廳</strong> (酥皮蛋撻) <a href="https://www.google.com/maps/search/?api=1&query=金鳳茶餐廳" target="_blank" class="map-btn">📍MAP</a><br>
-                            • <strong>備選：</strong> 新華茶餐廳 / 金園茶餐廳 (酥皮蛋撻、凍檸茶)
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title" style="color:#d63384;">📍 必衝任務：Soft Thunder Bakery</span>
-                        <div class="sub-quest">
-                            • <strong>亞其林蛋塔 (千層)</strong> ➔ 幫哥哥帶回台灣首選 <a href="https://www.google.com/maps/search/?api=1&query=Soft+Thunder+Bakery+Wan+Chai" target="_blank" class="map-btn">📍MAP</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">銅鑼灣主戰場</span>
-                        <div class="sub-quest">
-                            • 🛍️ <strong>逛街：</strong> Perfumer H / 45R / Topologie Hysan / 時代廣場<br>
-                            • 🥛 <strong>補完：</strong> <span class="recommend-tag">推薦</span> <strong>義順牛奶公司</strong> (燉奶) <a href="https://www.google.com/maps/search/?api=1&query=義順牛奶公司+銅鑼灣" target="_blank" class="map-btn">📍MAP</a><br>
-                            • 🍝 <strong>美食：</strong> <strong>靠得住</strong> (粥麵) / <strong>八味客棧</strong> (✨提拉米蘇、蛋花酥)
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <img src="http://googleusercontent.com/image_collection/image_retrieval/10039497901073735818" class="decor-img">
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">FINEPRINT (咖啡)</span><a href="https://www.google.com/maps/search/?api=1&query=FINEPRINT+Central" target="_blank" class="map-a">📍 Map</a></div>
         </div>
-
-        <div class="day-card" style="border-color: var(--day4-accent);">
-            <div class="day-label pixel-font">Day 4: 5/5 FINAL MISSION</div>
-            <div class="quest-list">
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">深水埗早餐任務</span>
-                        <div class="sub-quest">
-                            • <span class="recommend-tag">推薦</span> <strong>新香園</strong> (蛋牛治 ⚠️ <strong>必烘底</strong>) <a href="https://www.google.com/maps/search/?api=1&query=新香園+深水埗" target="_blank" class="map-btn">📍MAP</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">九龍西美食大集合</span>
-                        <div class="sub-quest">
-                            • <span class="recommend-tag">推薦</span> <strong>麥文記麵家</strong> (牛腩、豬手、油菜、蠔油、雲吞) <a href="https://www.google.com/maps/search/?api=1&query=麥文記麵家" target="_blank" class="map-btn">📍MAP</a><br>
-                            • <strong>附近支線：</strong> 劉森記 (福榮街) / 坤記竹昇麵 / 譚仔雲南米線 / 華記潮洲滷水
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quest-item">
-                    <input type="checkbox">
-                    <div class="quest-content">
-                        <span class="quest-title">旺角最後衝刺</span>
-                        <div class="sub-quest">
-                            • 📸 <strong>景點：</strong> 金魚街 / 通菜街 / 女人街 / 舊油麻地警署<br>
-                            • 🍭 <strong>點心：</strong> 媽咪雞蛋仔 / 絲茶 (三重茶皇)<br>
-                            • ☕ <strong>飲茶：</strong> 倫敦大酒樓 / 蓮香樓
-                        </div>
-                        <div class="sub-quest" style="border-color: #ffb7b2; background: #fff5f5;">
-                            ⚠️ <strong>排雷筆記：</strong> 曲奇四重奏、佳佳甜品 (有人說不好吃)；Bakehouse 很油已刪除。
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Vission Nine</span><a href="https://www.google.com/maps/search/?api=1&query=Vission+Nine+Central" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">hara kako</span><a href="https://www.google.com/maps/search/?api=1&query=hara+kako+Sheung+Wan" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Select 18</span><a href="https://www.google.com/maps/search/?api=1&query=Select+18+Sheung+Wan" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">蘭芳園 (奶茶)</span><a href="https://www.google.com/maps/search/?api=1&query=Lan+Fong+Yuen+Central" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Ohlalagout (蛋塔)</span><a href="https://www.google.com/maps/search/?api=1&query=Ohlalagout+Sheung+Wan" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">The Ice Cream & Cookie Co.</span><a href="https://www.google.com/maps/search/?api=1&query=The+Ice+Cream+and+Cookie+Co" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Milligram Coffee</span><a href="https://www.google.com/maps/search/?api=1&query=Milligram+Coffee+Sheung+Wan" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">祥興茶行 (咖啡豆)</span><a href="https://www.google.com/maps/search/?api=1&query=Cheung+Hing+Tea+Sheung+Wan" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">EN (咖啡)</span><a href="https://www.google.com/maps/search/?api=1&query=EN+Coffee+Central" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Slowood (中環街市)</span><a href="https://www.google.com/maps/search/?api=1&query=Slowood+Central+Market" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Mr Simms糖果店</span><a href="https://www.google.com/maps/search/?api=1&query=Mr+Simms+Olde+Sweet+Shoppe+Central" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">石板街/半山扶梯</span><a href="https://www.google.com/maps/search/?api=1&query=Central-Mid-Levels+Escalator" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">山頂廣場 The Peak</span><a href="https://www.google.com/maps/search/?api=1&query=Peak+Galleria" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">竺扶大班燒味</span><a href="https://www.google.com/maps/search/?api=1&query=Chu+For+Taipan+Roasted+Meat" target="_blank" class="map-a">📍 Map</a></div>
         </div>
     </div>
 
-    <div class="progress-tracker">
-        <div class="pixel-font" style="font-size: 0.8rem; margin-bottom: 10px;">Progress</div>
-        <div id="progress-bar-bg" style="width: 200px; height: 15px; background: #eee; border: 2px solid #444;">
-            <div id="progress-fill" style="width: 0%; height: 100%; background: #22c55e;"></div>
+    <div class="day-section" style="border-color: var(--day3);">
+        <div class="day-tag pixel-font">LV.3 5/4 SUN</div>
+        <div class="time-header">灣仔/銅鑼灣</div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name"><span class="best-pick">推</span>金鳳茶餐廳</span><span class="note">酥皮蛋撻</span><a href="https://www.google.com/maps/search/?api=1&query=Kam+Fung+Cafe+Wan+Chai" target="_blank" class="map-a">📍 Map</a></div>
         </div>
-        <div class="pixel-font" style="font-size: 0.7rem; margin-top: 5px;"><span id="done-count">0</span> / 12 Key Quests</div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Soft Thunder (千層蛋塔)</span><a href="https://www.google.com/maps/search/?api=1&query=Soft+Thunder+Bakery+Wan+Chai" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">義順牛奶公司 (銅鑼灣)</span><a href="https://www.google.com/maps/search/?api=1&query=Yee+Shun+Milk+Company+Causeway+Bay" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Topologie Hysan Place</span><a href="https://www.google.com/maps/search/?api=1&query=Topologie+Hysan+Place" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">Perfumer H</span><a href="https://www.google.com/maps/search/?api=1&query=Perfumer+H+Hong+Kong" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">45R - Star Street</span><a href="https://www.google.com/maps/search/?api=1&query=45R+Star+Street" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">時代廣場 / 靠得住</span><a href="https://www.google.com/maps/search/?api=1&query=Times+Square+Hong+Kong" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name"><span class="best-pick">必</span>八味客棧</span><span class="note">提拉米蘇、蛋花酥</span><a href="https://www.google.com/maps/search/?api=1&query=Eight+Ways+Inn+Causeway+Bay" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">利東街/舊郵政局/藍屋</span><a href="https://www.google.com/maps/search/?api=1&query=Lee+Tung+Avenue" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">日街/藍瓶咖啡</span><a href="https://www.google.com/maps/search/?api=1&query=Blue+Bottle+Coffee+Wan+Chai" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">奇華茶室</span><a href="https://www.google.com/maps/search/?api=1&query=Kee+Wah+Tearoom+Wan+Chai" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">新華茶餐廳 / 金園茶餐廳</span><a href="https://www.google.com/maps/search/?api=1&query=San+Hoa+Cafe+Hong+Kong" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
     </div>
-</div>
 
-<script>
-    // 勾選與進度追蹤
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const doneDisplay = document.getElementById('done-count');
-    const progressFill = document.getElementById('progress-fill');
+    <div class="day-section" style="border-color: var(--day4);">
+        <div class="day-tag pixel-font">LV.4 5/5 MON</div>
+        <div class="time-header">深水埗/旺角</div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">新香園 (烘底蛋牛治)</span><a href="https://www.google.com/maps/search/?api=1&query=Sun+Heung+Yuen+Sham+Shui+Po" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">麥文記麵家 (雲吞/牛腩)</span><span class="note">推薦：牛腩、豬手、油菜、蠔油</span><a href="https://www.google.com/maps/search/?api=1&query=Mak+Man+Kee+Noodle+Shop" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">劉森記麵家 (福榮街)</span><a href="https://www.google.com/maps/search/?api=1&query=Lau+Sum+Kee+Noodle" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">坤記竹昇麵</span><a href="https://www.google.com/maps/search/?api=1&query=Kwan+Kee+Bamboo+Noodle" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">夏銘記 (魚蛋河)</span><a href="https://www.google.com/maps/search/?api=1&query=Ha+Ming+Kee+Fish+Ball" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">金魚街/通菜街</span><a href="https://www.google.com/maps/search/?api=1&query=Goldfish+Market+Mong+Kok" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">絲茶 (旺角)</span><span class="note">推薦：三重茶皇</span><a href="https://www.google.com/maps/search/?api=1&query=Siji+Tea+Mong+Kok" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">媽咪雞蛋仔 (旺角)</span><a href="https://www.google.com/maps/search/?api=1&query=Mammy+Pancake+Mong+Kok" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">倫敦大酒樓 / 蓮香樓</span><a href="https://www.google.com/maps/search/?api=1&query=London+Restaurant+Mong+Kok" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">譚仔雲南米線 (深水埗)</span><a href="https://www.google.com/maps/search/?api=1&query=TamJai+Yunnan+Mixian+Sham+Shui+Po" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">華記潮洲滷水車仔麵</span><a href="https://www.google.com/maps/search/?api=1&query=Wah+Kee+Chiu+Chow+Noodle" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
+        <div class="task-item">
+            <input type="checkbox"><div class="task-label"><span class="name">葵涌廣場</span><a href="https://www.google.com/maps/search/?api=1&query=Kwai+Chung+Plaza" target="_blank" class="map-a">📍 Map</a></div>
+        </div>
 
-    function updateProgress() {
-        const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
-        const total = 12; // 以主要大項目為計
-        
-        // 視覺回饋
-        checkboxes.forEach(cb => {
-            const content = cb.closest('.quest-item');
-            if (cb.checked) {
-                content.querySelector('.quest-title').classList.add('completed-text');
-                if(content.querySelector('.sub-quest')) content.querySelector('.sub-quest').classList.add('completed-text');
-            } else {
-                content.querySelector('.quest-title').classList.remove('completed-text');
-                if(content.querySelector('.sub-quest')) content.querySelector('.sub-quest').classList.remove('completed-text');
-            }
+        <div class="alert-box">
+            ⚠️ Bakehouse 很油刪除 / 玩具站 TOP 刪除 / 佳佳甜品、曲奇四重奏評價普。
+        </div>
+    </div>
+
+    <div class="footer-count pixel-font">
+        CLEARED: <span id="cleared">0</span>
+    </div>
+
+    <script>
+        const boxes = document.querySelectorAll('input[type="checkbox"]');
+        const countSpan = document.getElementById('cleared');
+
+        boxes.forEach(box => {
+            box.addEventListener('change', function() {
+                const labelContainer = this.nextElementSibling;
+                const nameSpan = labelContainer.querySelector('.name');
+                const noteSpan = labelContainer.querySelector('.note');
+                const mapBtn = labelContainer.querySelector('.map-a');
+
+                if (this.checked) {
+                    nameSpan.classList.add('strikethrough');
+                    if(noteSpan) noteSpan.classList.add('strikethrough');
+                    if(mapBtn) mapBtn.style.opacity = "0.3";
+                } else {
+                    nameSpan.classList.remove('strikethrough');
+                    if(noteSpan) noteSpan.classList.remove('strikethrough');
+                    if(mapBtn) mapBtn.style.opacity = "1";
+                }
+                updateCount();
+            });
         });
 
-        // 進度條
-        const percent = (checked / total) * 100;
-        progressFill.style.width = Math.min(percent, 100) + '%';
-        doneDisplay.innerText = checked;
-    }
-
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', updateProgress);
-    });
-
-    // 初始載入
-    updateProgress();
-</script>
-
+        function updateCount() {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            countSpan.innerText = checked;
+        }
+    </script>
 </body>
 </html>
-
