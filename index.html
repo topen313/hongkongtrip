@@ -3,262 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HK Adventure 2026 - Pixel Guide</title>
+    <title>HK Final Mission 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #fdfdf5;
-            --border-main: #4a4a4a;
-            --tab-inactive: #f0f0f0;
-            --day1-light: #e3f2fd;
-            --day2-light: #fce4ec;
-            --day3-light: #e8f5e9;
-            --day4-light: #fff9c4;
-            --text-dark: #333;
+            --bg-color: #fdfaf1;
+            --border-color: #333;
+            --tab-day1: #e3f2fd;
+            --tab-day2: #ffe5ec;
+            --tab-day3: #e8f5e9;
+            --tab-day4: #fffde7;
+            --text-main: #222;
         }
 
         body {
-            background-color: var(--bg-body);
+            background-color: var(--bg-color);
             font-family: 'Segoe UI', "Microsoft JhengHei", sans-serif;
-            color: var(--text-dark);
-            margin: 0; padding: 10px;
-            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* 住宿資訊 */
-        .hotel-info {
-            width: 95%; max-width: 500px;
-            background: #fff; border: 3px solid var(--border-main);
-            box-shadow: 4px 4px 0px var(--border-main);
-            padding: 12px; margin-bottom: 15px; text-align: center;
+        /* 頂部飯店資訊 */
+        .hotel-header {
+            width: 95%;
+            max-width: 500px;
+            background: white;
+            border: 3px solid var(--border-color);
+            box-shadow: 4px 4px 0px var(--border-color);
+            padding: 12px;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
-        /* 分頁標籤 */
-        .tab-container {
-            display: flex; width: 95%; max-width: 500px;
-            justify-content: space-between; margin-bottom: -3px; z-index: 1;
+        .pixel-font { font-family: 'Press Start 2P', cursive; font-size: 11px; color: #d32f2f; }
+
+        /* 分頁切換 */
+        .tab-wrapper {
+            display: flex;
+            width: 95%;
+            max-width: 500px;
+            gap: 4px;
         }
 
         .tab-btn {
-            flex: 1; padding: 10px 5px; font-size: 12px;
-            border: 3px solid var(--border-main);
-            background: var(--tab-inactive); cursor: pointer;
-            font-family: 'Press Start 2P', cursive;
+            flex: 1;
+            padding: 10px 0;
+            border: 3px solid var(--border-color);
+            border-bottom: none;
+            background: #eee;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
         }
 
-        .tab-btn.active {
-            background: #fff; border-bottom: none; transform: translateY(-2px);
+        .tab-btn.active { background: white; padding-bottom: 15px; margin-top: -5px; }
+
+        /* 內容區 */
+        .page-content {
+            width: 95%;
+            max-width: 500px;
+            background: white;
+            border: 3px solid var(--border-color);
+            box-shadow: 6px 6px 0px var(--border-color);
+            padding: 15px;
+            box-sizing: border-box;
+            display: none;
+            min-height: 600px;
         }
 
-        /* 行程內容區 */
-        .content-box {
-            width: 95%; max-width: 500px;
-            background: #fff; border: 3px solid var(--border-main);
-            box-shadow: 6px 6px 0px var(--border-main);
-            padding: 20px; box-sizing: border-box; min-height: 600px;
+        .page-content.active { display: block; }
+
+        /* 行程標題與清單 */
+        .time-box {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            margin: 15px 0 10px 0;
+            font-weight: bold;
+            border-left: 5px solid var(--border-color);
         }
 
-        .day-content { display: none; }
-        .day-content.active { display: block; }
-
-        .time-header {
-            font-weight: bold; font-size: 0.9em; color: #777;
-            margin: 20px 0 10px 0; border-bottom: 2px dashed #ddd;
+        .item-wrap { display: flex; align-items: flex-start; margin: 10px 0; }
+        
+        input[type="checkbox"] {
+            appearance: none; width: 20px; height: 20px; border: 2px solid var(--border-color);
+            margin-right: 12px; flex-shrink: 0; cursor: pointer; background: white;
+            position: relative; top: 2px;
         }
+        input[type="checkbox"]:checked { background: #b9e4c9; }
+        input[type="checkbox"]:checked::after { content: "✔"; position: absolute; top: -3px; left: 3px; font-size: 16px; }
 
-        /* 獨立店家樣式 */
-        .item-row {
-            display: flex; align-items: flex-start;
-            margin: 12px 0; padding: 5px 0;
-        }
-
-        .checkbox-container {
-            width: 22px; height: 22px; border: 3px solid var(--border-main);
-            background: #fff; cursor: pointer; position: relative;
-            flex-shrink: 0; margin-right: 12px;
-        }
-
-        .checkbox-container.checked { background: #b9e4c9; }
-        .checkbox-container.checked::after {
-            content: '✔'; position: absolute; left: 2px; top: -4px; color: #444; font-size: 16px;
-        }
-
-        .place-link {
-            text-decoration: none; color: #1a73e8; font-weight: bold;
-            border-bottom: 1px solid transparent;
-        }
-        .place-link:hover { border-bottom: 1px solid #1a73e8; }
-
-        .note { font-size: 0.85em; color: #666; display: block; margin-top: 3px; }
-
-        .plain-text { margin-left: 34px; font-size: 0.95em; color: #444; }
-
-        .warning-tag { color: #d32f2f; font-weight: bold; margin-top: 15px; font-size: 0.85em; padding: 10px; border: 2px dotted #d32f2f; }
+        .item-text { line-height: 1.4; }
+        .item-note { font-size: 0.85em; color: #666; display: block; margin-top: 2px; }
+        
+        .highlight-text { color: #d32f2f; font-weight: bold; }
+        .info-tag { font-size: 0.8em; background: #eee; padding: 1px 4px; border: 1px solid #ccc; margin-right: 5px; }
 
     </style>
 </head>
 <body>
 
-    <div class="hotel-info">
-        <div style="font-size: 10px; color: #aaa;">HOME BASE</div>
-        <strong>🏨 Stellar 星寓 (海匯酒店)</strong>
+    <div class="hotel-header">
+        <div style="font-size: 10px; letter-spacing: 1px;">CURRENT BASE</div>
+        <div style="font-weight: bold; font-size: 1.2em; margin: 5px 0;">🏨 Stellar 星寓 (海匯酒店)</div>
+        <div class="pixel-font">LOGGING START...</div>
     </div>
 
-    <div class="tab-container">
-        <button class="tab-btn active" onclick="openDay(event, 'day1')" style="background: var(--day1-light);">D1</button>
-        <button class="tab-btn" onclick="openDay(event, 'day2')" style="background: var(--day2-light);">D2</button>
-        <button class="tab-btn" onclick="openDay(event, 'day3')" style="background: var(--day3-light);">D3</button>
-        <button class="tab-btn" onclick="openDay(event, 'day4')" style="background: var(--day4-light);">D4</button>
+    <div class="tab-wrapper">
+        <div class="tab-btn active" style="border-top-color: var(--tab-day1);" onclick="switchTab(event, 'day1')">D1</div>
+        <div class="tab-btn" style="border-top-color: var(--tab-day2);" onclick="switchTab(event, 'day2')">D2</div>
+        <div class="tab-btn" style="border-top-color: var(--tab-day3);" onclick="switchTab(event, 'day3')">D3</div>
+        <div class="tab-btn" style="border-top-color: var(--tab-day4);" onclick="switchTab(event, 'day4')">D4</div>
     </div>
 
-    <div class="content-box">
-        
-        <div id="day1" class="day-content active">
-            <h3 style="color:#2196f3">5/2 (五) 抵達與尖沙咀</h3>
-            <div class="time-header">15:00 - 17:30</div>
-            <div class="plain-text">抵港、入住 Stellar、陪媽媽往紅館</div>
-            <div class="time-header">18:30 - 21:00 尖沙咀自由時間</div>
-            
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Hashtag+B+尖沙咀" target="_blank">Hashtag B</a><span class="note">拿破崙蛋塔</span></div>
-            </div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Truffle+Bakery+Hong+Kong" target="_blank">Truffle Bakery</a><span class="note">✨麵包</span></div>
-            </div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=祥興記上海生煎包+尖沙咀" target="_blank">祥興記上海生煎包</a><span class="note">✨招牌生煎</span></div>
-            </div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=華嫂冰室+尖沙咀" target="_blank">華嫂冰室</a></div>
-            </div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=K11+Art+Mall+Topologie" target="_blank">Topologie K11 Pop Up</a></div>
-            </div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=彌敦道+香港" target="_blank">彌敦道散步</a></div>
-            </div>
+    <div id="day1" class="page-content active">
+        <div class="pixel-font" style="margin-bottom: 10px;">5/2 (五) 抵達日</div>
+        <div style="font-size: 0.9em; border: 1px solid #ddd; padding: 8px; background: #fafafa;">
+            今日行程：15:00 抵港 16:30 入住 Stellar → 17:30 直奔紅館陪媽媽 → 18:30 - 21:00 尖沙咀自由時間
         </div>
 
-        <div id="day2" class="day-content">
-            <h3 style="color:#e91e63">5/3 (六) 港島日</h3>
-            <div class="time-header">09:30 早餐 (二選一)</div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=生記粥品專家+上環" target="_blank">生記粥品專家</a><span class="note">✨炸兩、廣東粥</span></div>
-            </div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=六安居+香港" target="_blank">六安居</a></div>
-            </div>
-            <div class="time-header">11:00 上中環選物與咖啡</div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Select+18+香港" target="_blank">Select 18</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=hara+kako+Sheung+Wan" target="_blank">hara kako</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Slowood+中環" target="_blank">Slowood</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Mr+Simms+Olde+Sweet+Shoppe+中環" target="_blank">Mr Simms (糖果)</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=EN+Coffee+香港" target="_blank">EN (咖啡)</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=The+Ice+Cream+Cookie+Co+香港" target="_blank">The Ice Cream & Cookie Co.</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Milligram+Coffee+香港" target="_blank">Milligram Coffee</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Ohlalagout+香港" target="_blank">Ohlalagout (蛋塔)</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=祥興茶行+香港" target="_blank">祥興茶行 (咖啡豆)</a></div></div>
-            
-            <div class="time-header">14:00 中環經典區</div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=石板街+中環" target="_blank">石板街</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=中環半山扶手電梯" target="_blank">半山扶手電梯</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=蘭芳園+中環" target="_blank">蘭芳園</a><span class="note">✨奶茶好喝</span></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=FINEPRINT+中環" target="_blank">FINEPRINT</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Vission+Nine+中環" target="_blank">Vission Nine</a></div></div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=竺扶大班燒味+中環" target="_blank">竺扶大班燒味</a><span class="note">✨燒鵝</span></div>
-            </div>
+        <div class="time-box">尖沙咀自由時間地標 / 店家</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Hashtag B (拿破崙蛋塔)</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Truffle Bakery Hong Kong<span class="item-note">備註：麵包</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">祥興記上海生煎包 (尖沙咀)<span class="item-note">備註：招牌生煎</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">華嫂冰室 (尖沙咀)</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Topologie K11 Art Mall Pop Up</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">彌敦道散步</div></div>
+    </div>
+
+    <div id="day2" class="page-content">
+        <div class="pixel-font" style="margin-bottom: 10px;">5/3 (六) 港島日</div>
+        <div style="font-size: 0.9em; border: 1px solid #ddd; padding: 8px; background: #fafafa;">
+            今日行程：09:30 早餐 → 11:00 上環/中環散步咖啡 → 14:00 中環經典區 → 17:00 飯店休息 → 18:30 演唱會
         </div>
 
-        <div id="day3" class="day-content">
-            <h3 style="color:#4caf50">5/4 (日) 灣仔銅鑼灣</h3>
-            <div class="time-header">09:00 早餐</div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=金鳳茶餐廳+灣仔" target="_blank">金鳳茶餐廳</a><span class="note">✨酥皮蛋撻</span></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=新華茶餐廳+香港" target="_blank">新華茶餐廳</a><span class="note">沙爹牛肉麵</span></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=金園茶餐廳+香港" target="_blank">金園茶餐廳</a></div></div>
+        <div class="time-box">早餐 (二選一)</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">生記粥品專家<span class="item-note">備註：廣東粥、炸兩</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">六安居</div></div>
 
-            <div class="time-header">11:00 灣仔散步</div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=利東街+灣仔" target="_blank">利東街</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=藍屋+灣仔" target="_blank">藍屋</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=日街+灣仔" target="_blank">日街</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=藍瓶咖啡+灣仔店" target="_blank">藍瓶咖啡</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=奇華茶室+灣仔" target="_blank">奇華茶室</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Soft+Thunder+Bakery+灣仔" target="_blank">Soft Thunder Bakery</a><span class="note">📍 重點：✨千層蛋塔</span></div></div>
+        <div class="time-box">上環 / 中環 散步選物</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Select 18<span class="item-note">備註：古物店</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">hara kako (Sheung Wan)</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Slowood (中環街市店)</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Mr Simms Olde Sweet Shoppe<span class="item-note">備註：糖果</span></div></div>
 
-            <div class="time-header">14:00 銅鑼灣主場</div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Perfumer+H+銅鑼灣" target="_blank">Perfumer H</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=45R+Star+Street" target="_blank">45R</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=Topologie+Hysan+Place" target="_blank">Topologie Hysan Place</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=時代廣場+銅鑼灣" target="_blank">時代廣場</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=義順牛奶公司+銅鑼灣" target="_blank">義順牛奶公司</a><span class="note">✨吃燉奶</span></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=靠得住+銅鑼灣" target="_blank">靠得住</a><span class="note">✨粥麵</span></div></div>
-            <div class="time-header">18:30 晚餐</div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=八味客棧+香港" target="_blank">八味客棧</a><span class="note">✨提拉米蘇、蛋花酥</span></div>
-            </div>
+        <div class="time-box">咖啡 / 甜點 / 茶</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">EN<span class="item-note">備註：咖啡</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">The Ice Cream & Cookie Co.<span class="item-note">備註：冰淇淋</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Milligram Coffee<span class="item-note">備註：咖啡甜點</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Ohlalagout<span class="item-note">備註：蛋塔</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">祥興茶行<span class="item-note">備註：咖啡豆</span></div></div>
+
+        <div class="time-box">中環經典區地標 / 店家</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">石板街</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">中環半山扶手電梯</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">蘭芳園 中環總店<span class="item-note">備註：奶茶好喝</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">FINEPRINT</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Vission Nine</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text highlight-text">竺扶大班燒味<span class="item-note">備註：燒鵝</span></div></div>
+    </div>
+
+    <div id="day3" class="page-content">
+        <div class="pixel-font" style="margin-bottom: 10px;">5/4 (日) 灣仔銅鑼灣</div>
+        <div style="font-size: 0.9em; border: 1px solid #ddd; padding: 8px; background: #fafafa;">
+            今日行程：09:00 早餐 → 11:00 灣仔散步 → 14:00 銅鑼灣主場 → 18:30 晚餐
         </div>
 
-        <div id="day4" class="day-content">
-            <h3 style="color:#fbc02d">5/5 (一) 最後衝刺</h3>
-            <div class="time-header">10:30 早餐</div>
-            <div class="item-row">
-                <div class="checkbox-container" onclick="toggleCheck(this)"></div>
-                <div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=新香園+深水埗" target="_blank">新香園</a><span class="note">✨蛋牛治，⚠️一定要烘底</span></div>
-            </div>
-            
-            <div class="time-header">11:30 深水埗/太子美食</div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=麥文記麵家+佐敦" target="_blank">麥文記麵家</a><span class="note">✨雲吞、牛腩麵、豬手、蠔油</span></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=劉森記麵家+深水埗" target="_blank">劉森記</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=坤記竹昇麵+深水埗" target="_blank">坤記竹昇麵</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=夏銘記+香港" target="_blank">夏銘記</a><span class="note">魚蛋河</span></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=華記潮洲滷水車仔麵+太子" target="_blank">華記潮洲滷水車仔麵</a></div></div>
-            
-            <div class="time-header">14:00 旺角最後衝刺</div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=玩具站+TOP+旺角" target="_blank">玩具站 (T.O.P)</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=金魚街+旺角" target="_blank">金魚街</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=通菜街+旺角" target="_blank">通菜街</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=絲茶+旺角" target="_blank">絲茶</a><span class="note">✨三重茶皇</span></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=媽咪雞蛋仔+旺角" target="_blank">媽咪雞蛋仔</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=倫敦大酒樓+旺角" target="_blank">倫敦大酒樓</a></div></div>
-            <div class="item-row"><div class="checkbox-container" onclick="toggleCheck(this)"></div><div><a class="place-link" href="https://www.google.com/maps/search/?api=1&query=蓮香樓+香港" target="_blank">蓮香樓</a></div></div>
+        <div class="time-box">早餐 (二選一)</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">金鳳茶餐廳<span class="item-note">備註：酥皮蛋撻</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">新華茶餐廳<span class="item-note">備註：沙爹牛肉麵</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">金園茶餐廳<span class="item-note">備註：酥皮蛋撻、凍檸茶</span></div></div>
 
-            <div class="warning-tag">
-                ⚠️ 排雷區：曲奇四重奏、佳佳甜品 (有人說不好吃)
-            </div>
-            <div class="time-header">16:00 取行李前往機場</div>
+        <div class="time-box">灣仔散步地標 / 店家</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">利東街<span class="item-note">備註：喜帖街</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">藍屋</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">日街</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">藍瓶咖啡 灣仔店</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">奇華茶室</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">舊灣仔郵政局</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text highlight-text">Soft Thunder Bakery and Coffee<span class="item-note">📍 重點：千層蛋塔</span></div></div>
+
+        <div class="time-box">銅鑼灣主場</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Perfumer H</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">45R - Hong Kong Star Street</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">Topologie Hysan Place</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">時代廣場</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">義順牛奶公司 (銅鑼灣分店)<span class="item-note">備註：吃燉奶</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">靠得住<span class="item-note">備註：粥麵</span></div></div>
+
+        <div class="time-box">晚餐</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">八味客棧<span class="item-note">備註：提拉米蘇、蛋花酥</span></div></div>
+    </div>
+
+    <div id="day4" class="page-content">
+        <div class="pixel-font" style="margin-bottom: 10px;">5/5 (一) 回程日</div>
+        <div style="font-size: 0.9em; border: 1px solid #ddd; padding: 8px; background: #fafafa;">
+            今日行程：10:30 早餐 → 11:30 深水埗/太子美食會串 → 14:00 旺角最後衝刺 → 16:00 機場
         </div>
 
+        <div class="time-box">早餐</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">新香園<span class="item-note">備註：蛋牛治，⚠️ 一定要烘底</span></div></div>
+
+        <div class="time-box">深水埗 / 太子美食大會串</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">麥文記麵家<span class="item-note">備註：推薦：雲吞、牛腩麵、豬手撈麵、油菜花、蠔油。有人說麵不好吃但推雲吞</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">劉森記麵家 (福榮街)</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">坤記竹昇麵<span class="item-note">備註：正統雲吞麵</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">夏銘記<span class="item-note">備註：魚蛋河</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">華記潮洲滷水車仔麵 (太子店)</div></div>
+
+        <div class="time-box">旺角最後衝刺</div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">玩具站 (T.O.P)</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">金魚街 / 通菜街</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">絲茶 (旺角店)<span class="item-note">備註：三重茶皇、星空茶皇</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">媽咪雞蛋仔 (旺角)</div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">倫敦大酒樓<span class="item-note">備註：飲茶選項</span></div></div>
+        <div class="item-wrap"><input type="checkbox"><div class="item-text">蓮香樓<span class="item-note">備註：飲茶選項</span></div></div>
+
+        <div class="time-box" style="border-left-color: #d32f2f;">⚠️ 注意：排雷區 (不用打勾)</div>
+        <div style="font-size: 0.85em; color: #d32f2f; padding: 5px;">
+            • 曲奇四重奏 (有人說不好吃)<br>
+            • 佳佳甜品 (有人說不好吃)<br>
+            • Bakehouse (聽說很油!!!)
+        </div>
     </div>
 
     <script>
-        function openDay(evt, dayName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("day-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-                tabcontent[i].classList.remove("active");
+        function switchTab(evt, dayId) {
+            var i, contents, tabs;
+            contents = document.getElementsByClassName("page-content");
+            for (i = 0; i < contents.length; i++) {
+                contents[i].style.display = "none";
+                contents[i].classList.remove("active");
             }
-            tablinks = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            tabs = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
             }
-            document.getElementById(dayName).style.display = "block";
-            document.getElementById(dayName).classList.add("active");
-            evt.currentTarget.className += " active";
-        }
-
-        function toggleCheck(el) {
-            el.classList.toggle('checked');
+            document.getElementById(dayId).style.display = "block";
+            document.getElementById(dayId).classList.add("active");
+            evt.currentTarget.classList.add("active");
         }
     </script>
 </body>
