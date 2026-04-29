@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HK Adventure 2026</title>
+    <title>HK Final Mission</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fcf8e8; /* 淺米色背景 */
-            --border-color: #555;
-            --accent-pink: #ffb7c5;
-            --accent-blue: #a2d2ff;
-            --accent-green: #b9e4c9;
-            --text-color: #444;
+            --bg-color: #f8f9fa;
+            --border-color: #333;
+            --accent-pink: #ffe5ec;
+            --accent-blue: #e3f2fd;
+            --accent-green: #e8f5e9;
+            --accent-yellow: #fffde7;
+            --text-main: #222;
+            --text-sub: #666;
         }
 
         body {
             background-color: var(--bg-color);
             font-family: 'Segoe UI', "Microsoft JhengHei", sans-serif;
-            color: var(--text-color);
+            color: var(--text-main);
             margin: 0;
             padding: 20px;
             display: flex;
@@ -26,154 +28,204 @@
             align-items: center;
         }
 
+        .hotel-banner {
+            width: 100%;
+            max-width: 550px;
+            background: white;
+            border: 3px solid var(--border-color);
+            box-shadow: 4px 4px 0px var(--border-color);
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
         .pixel-title {
             font-family: 'Press Start 2P', cursive;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 30px;
-            color: #d32f2f;
-            text-shadow: 3px 3px 0px #eee;
+            font-size: 14px;
+            color: #ff5252;
+            margin: 10px 0;
         }
 
         .itinerary-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
         }
 
         .day-card {
             background: white;
-            border: 4px solid var(--border-color);
-            box-shadow: 6px 6px 0px var(--border-color);
-            margin-bottom: 30px;
-            padding: 15px;
-            position: relative;
+            border: 3px solid var(--border-color);
+            box-shadow: 5px 5px 0px var(--border-color);
+            margin-bottom: 35px;
+            padding: 0;
+            overflow: hidden;
         }
 
         .day-header {
-            background: var(--accent-blue);
-            border-bottom: 4px solid var(--border-color);
-            margin: -15px -15px 15px -15px;
-            padding: 10px;
+            padding: 12px 15px;
             font-weight: bold;
+            border-bottom: 3px solid var(--border-color);
             display: flex;
             justify-content: space-between;
+            font-size: 1.1em;
         }
 
-        .time-slot {
+        .content-body {
+            padding: 15px;
+        }
+
+        .time-tag {
             font-weight: bold;
-            color: #888;
-            font-size: 0.85em;
-            margin-top: 10px;
             display: block;
+            margin: 12px 0 5px 0;
+            color: #444;
+            border-left: 4px solid var(--border-color);
+            padding-left: 8px;
         }
 
-        .task-item {
+        .item-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .item-list li {
+            margin: 6px 0;
             display: flex;
-            align-items: center;
-            margin: 8px 0;
-            padding: 5px;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .task-item:hover {
-            border: 2px dashed var(--accent-pink);
-            transform: translateX(5px);
-            background: #fffcfc;
+            align-items: flex-start;
         }
 
         input[type="checkbox"] {
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border: 3px solid var(--border-color);
             margin-right: 10px;
+            margin-top: 4px;
             cursor: pointer;
-            position: relative;
-            background: white;
         }
 
-        input[type="checkbox"]:checked {
-            background: var(--accent-green);
+        .sub-group {
+            margin-left: 25px;
+            font-size: 0.9em;
+            color: var(--text-sub);
+            border-left: 1px dashed #ccc;
+            padding-left: 10px;
         }
 
-        input[type="checkbox"]:checked::after {
-            content: "✔";
-            position: absolute;
-            top: -4px;
-            left: 2px;
-            font-size: 14px;
-            color: var(--border-color);
-        }
-
-        .badge {
-            font-size: 0.75em;
-            padding: 2px 5px;
-            background: #eee;
-            border: 2px solid var(--border-color);
-            margin-left: 5px;
-        }
-
-        .warning-box {
-            border: 3px double #d32f2f;
-            padding: 8px;
-            margin-top: 10px;
-            font-size: 0.85em;
-            color: #d32f2f;
-            background: #fff5f5;
-        }
+        .highlight { color: #d32f2f; font-weight: bold; }
+        .warning { color: #d32f2f; border: 2px dashed #d32f2f; padding: 5px; margin-top: 10px; font-size: 0.85em; }
 
     </style>
 </head>
 <body>
 
-    <div class="pixel-title">HK MISSION: 4 DAYS</div>
+    <div class="hotel-banner">
+        <div style="font-size: 0.7em; letter-spacing: 2px;">BASE CAMP</div>
+        <div style="font-weight: bold; font-size: 1.3em; margin: 5px 0;">🏨 Stellar 星寓 (海匯酒店)</div>
+        <div class="pixel-title">MISSION LOG</div>
+    </div>
 
     <div class="itinerary-container">
+
         <div class="day-card">
-            <div class="day-header"><span>DAY 1</span> <span>5/2 (FRI)</span></div>
-            <span class="time-slot">15:00 / 17:30</span>
-            <div class="task-item"><input type="checkbox"> Stellar Check-in</div>
-            <div class="task-item"><input type="checkbox"> 紅館送機 (尖沙咀自由時間)</div>
-            <hr style="border: 1px dashed #ccc">
-            <div class="task-item"><input type="checkbox"> Hashtag B 拿破崙蛋塔</div>
-            <div class="task-item"><input type="checkbox"> Truffle Bakery / 祥興記生煎</div>
-            <div class="task-item"><input type="checkbox"> Topologie K11 Art Mall</div>
+            <div class="day-header" style="background: var(--accent-blue);">
+                <span>5/2 (五) 抵達日</span><span>紅館送機 → 尖沙咀</span>
+            </div>
+            <div class="content-body">
+                <span class="time-tag">15:00 - 17:30</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 15:00 抵港 16:30 入住 Stellar。</li>
+                    <li><input type="checkbox"> 17:30 直奔紅館陪媽媽。</li>
+                </ul>
+                <span class="time-tag">18:30 - 21:00 尖沙咀自由時間</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> Hashtag B (拿破崙蛋塔)、Truffle Bakery (✨麵包)。</li>
+                    <li><input type="checkbox"> 祥興記上海生煎包 (✨招牌生煎)、華嫂冰室。</li>
+                    <li><input type="checkbox"> Topologie K11 Art Mall Pop Up、彌敦道散步。</li>
+                </ul>
+            </div>
         </div>
 
         <div class="day-card">
-            <div class="day-header" style="background: var(--accent-pink);"><span>DAY 2</span> <span>5/3 (SAT)</span></div>
-            <span class="time-slot">09:30 / 11:00</span>
-            <div class="task-item"><input type="checkbox"> 生記粥品 或 六安居</div>
-            <div class="task-item"><input type="checkbox"> 上中環散步 (Select 18 / EN)</div>
-            <span class="time-slot">14:00</span>
-            <div class="task-item"><input type="checkbox"> 竺扶大班燒味 <span class="badge">燒鵝</span></div>
-            <div class="task-item"><input type="checkbox"> 石板街 / Vission Nine</div>
-            <span class="time-slot">18:30</span>
-            <div class="task-item"><input type="checkbox"> 演唱會 START!</div>
+            <div class="day-header" style="background: var(--accent-pink);">
+                <span>5/3 (六) 港島日</span><span>上環 → 中環 → 演唱會</span>
+            </div>
+            <div class="content-body">
+                <span class="time-tag">09:30 早餐 (二選一)</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 生記粥品專家 (✨炸兩、廣東粥) 或 六安居。</li>
+                </ul>
+                <span class="time-tag">11:00 上環/中環 散步與咖啡</span>
+                <div class="sub-group">
+                    • 選物：Select 18、hara kako、Slowood、Mr Simms (糖果)。<br>
+                    • 咖啡/甜點：EN、The Ice Cream & Cookie Co.、Milligram Coffee、Ohlalagout (蛋塔)、祥興茶行。
+                </div>
+                <span class="time-tag">14:00 中環經典區</span>
+                <div class="sub-group">
+                    • 景點：石板街、半山扶手電梯。<br>
+                    • 點心：蘭芳園 (✨奶茶)、FINEPRINT、Vission Nine。<br>
+                    • 正餐：<span class="highlight">竺扶大班燒味 (✨燒鵝)</span>。
+                </div>
+                <span class="time-tag">17:00 / 18:30</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 17:00 回飯店休息 → 18:30 出發看演唱會。</li>
+                </ul>
+            </div>
         </div>
 
         <div class="day-card">
-            <div class="day-header" style="background: var(--accent-green);"><span>DAY 3</span> <span>5/4 (SUN)</span></div>
-            <span class="time-slot">09:00 / 11:00</span>
-            <div class="task-item"><input type="checkbox"> 金鳳茶餐廳 (酥皮蛋撻)</div>
-            <div class="task-item"><input type="checkbox"> Soft Thunder <span class="badge">必買千層</span></div>
-            <span class="time-slot">14:00</span>
-            <div class="task-item"><input type="checkbox"> 銅鑼灣 (Perfumer H / 45R)</div>
-            <div class="task-item"><input type="checkbox"> 義順牛奶公司 / 靠得住</div>
-            <div class="task-item"><input type="checkbox"> 晚餐：八味客棧</div>
+            <div class="day-header" style="background: var(--accent-green);">
+                <span>5/4 (日) 灣仔 → 銅鑼灣</span><span>最好逛日 + 甜點補齊</span>
+            </div>
+            <div class="content-body">
+                <span class="time-tag">09:00 早餐</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 金鳳茶餐廳 (✨酥皮蛋撻) 或 新華/金園茶餐廳。</li>
+                </ul>
+                <span class="time-tag">11:00 灣仔散步</span>
+                <div class="sub-group">
+                    • 利東街、藍屋、日街、藍瓶咖啡、奇華茶室。<br>
+                    • <span class="highlight">📍 重點：Soft Thunder Bakery (✨千層蛋塔)</span>。
+                </div>
+                <span class="time-tag">14:00 銅鑼灣主場</span>
+                <div class="sub-group">
+                    • 逛街：Perfumer H、45R、Topologie Hysan Place、時代廣場。<br>
+                    • 甜點：義順牛奶公司 (銅鑼灣分店) ✨吃燉奶。<br>
+                    • 正餐：靠得住 (✨粥麵)。
+                </div>
+                <span class="time-tag">18:30 晚餐</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 八味客棧 (✨提拉米蘇、蛋花酥)。</li>
+                </ul>
+            </div>
         </div>
 
         <div class="day-card">
-            <div class="day-header" style="background: #e0e0e0;"><span>DAY 4</span> <span>5/5 (MON)</span></div>
-            <span class="time-slot">10:30</span>
-            <div class="task-item"><input type="checkbox"> 新香園 (蛋牛治 烘底!)</div>
-            <span class="time-slot">11:30</span>
-            <div class="task-item"><input type="checkbox"> 麥文記 / 劉森記 (美食會串)</div>
-            <span class="time-slot">14:00</span>
-            <div class="task-item"><input type="checkbox"> 旺角 (T.O.P / 絲茶)</div>
-            <div class="warning-box">⚠️ 排雷：曲奇四重奏、佳佳甜品</div>
+            <div class="day-header" style="background: var(--accent-yellow);">
+                <span>5/5 (一) 回程前</span><span>深水埗 → 旺角 → 機場</span>
+            </div>
+            <div class="content-body">
+                <span class="time-tag">10:30 早餐</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 新香園 (✨蛋牛治，⚠️ 一定要烘底)。</li>
+                </ul>
+                <span class="time-tag">11:30 深水埗/太子 (美食大會串)</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 麥文記麵家 (✨推薦：雲吞、牛腩麵、豬手撈麵、油菜花、蠔油)。</li>
+                    <li><input type="checkbox"> 劉森記、坤記竹昇麵、夏銘記、華記潮洲滷水車仔麵。</li>
+                </ul>
+                <span class="time-tag">14:00 旺角最後衝刺</span>
+                <div class="sub-group">
+                    • 逛街：玩具站 (T.O.P)、金魚街、通菜街、dokidoki、絲茶 (✨三重茶皇)。<br>
+                    • 點心：媽咪雞蛋仔。<br>
+                    • 備註：倫敦大酒樓 / 蓮香樓 (飲茶)。
+                </div>
+                <div class="warning">
+                    ⚠️ 排雷：曲奇四重奏、佳佳甜品。
+                </div>
+                <span class="time-tag">16:00</span>
+                <ul class="item-list">
+                    <li><input type="checkbox"> 取行李前往機場。</li>
+                </ul>
+            </div>
         </div>
+
     </div>
 
 </body>
